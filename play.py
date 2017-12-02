@@ -52,6 +52,8 @@ if __name__ == '__main__':
 
     level_increaser = pygame.time.set_timer(pygame.USEREVENT + 1, 20000)
 
+    pygame.key.set_repeat(200, 50)
+
     screen = Screen()
 
     game = Game()
