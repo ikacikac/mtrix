@@ -2,6 +2,9 @@
 
 
 from copy import deepcopy
+from blinker import signal
+
+from game_events import lines_cleared
 
 from game_exceptions import *
 
@@ -83,6 +86,8 @@ class Board(object):
         self._board[-1] = [FLOOR] * (BOARD_WIDTH + 2)
 
         self._board = self._board[:BOARD_HEIGHT + 1]
+
+        lines_cleared.send(lines=len(filled_rows))
 
     def add_element(self, element):
         """

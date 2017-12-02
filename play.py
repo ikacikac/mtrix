@@ -11,6 +11,8 @@ from screen import Screen
 from internal_config import STATE_NEW_GAME, STATE_PLAYING, STATE_PAUSED, STATE_GAME_OVER
 from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_ESCAPE, MOVE_SMASH
 
+from game_events import increase_level
+
 key_pressed = lambda e, k: e.type == pygame.KEYDOWN and e.key == k
 
 
@@ -21,17 +23,15 @@ def pg_get_input():
 
         if event.type == pygame.QUIT:
             sys.exit()
+        elif event.type == pygame.USEREVENT + 1:
+            increase_level.send(level=1)
         elif key_pressed(event, pygame.K_UP):
-            # print 'UP'
             key = MOVE_UP
         elif key_pressed(event, pygame.K_DOWN):
-            # print 'DOWN'
             key = MOVE_DOWN
         elif key_pressed(event, pygame.K_LEFT):
-            # print 'LEFT'
             key = MOVE_LEFT
         elif key_pressed(event, pygame.K_RIGHT):
-            # print 'RIGHT'
             key = MOVE_RIGHT
         elif key_pressed(event, pygame.K_ESCAPE):
             key = MOVE_ESCAPE
@@ -42,20 +42,17 @@ def pg_get_input():
 
 if __name__ == '__main__':
 
-    from random import randrange
-    from time import time, sleep
-
     pygame.init()
-
     pygame.font.init()
-    font = pygame.font.SysFont("", 20)
+
+    level_increaser = pygame.time.set_timer(pygame.USEREVENT + 1, 20000)
+
+    screen = Screen()
 
     game = Game()
     clock = pygame.time.Clock()
 
     state = STATE_NEW_GAME
-
-    screen = Screen()
 
     while True:
 
@@ -65,8 +62,8 @@ if __name__ == '__main__':
             print 'GAME OVER'
             break
 
-        if user_key == MOVE_SMASH:
-            screen.activate_shaking()
+        # if user_key == MOVE_SMASH:
+        #     screen.activate_shaking()
 
         runnable, board = game.update(user_key)
 

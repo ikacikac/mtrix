@@ -5,6 +5,11 @@ from time import time
 from board import Board
 from element import Element, get_possible_movements
 
+from game_events import lines_cleared, level_increased
+from game_events import current_lines, current_score, current_level
+from game_events import increase_level
+from game_events import activate_shaking
+
 from game_exceptions import ColException
 
 from internal_config import BOARD_HEIGHT, BOARD_WIDTH
@@ -28,6 +33,17 @@ class Game(object):
         self._accumulated_step_time = 0
         self._elements = [Element.get_new_element(), Element.get_new_element()]
         self._last_updated = time()
+        self._step_seconds = STEP_SECONDS
+
+        self.score = 0
+        self.level = 1
+        self.lines = 0
+
+        current_lines.send(lines=self.lines)
+        current_score.send(score=self.score)
+        current_level.send(level=self.level)
+
+        self._add_listeners()
 
     def _get_element(self):
         self._elements.append(Element.get_new_element())
@@ -87,11 +103,30 @@ class Game(object):
 
         self._accumulated_step_time += time() - start_step
 
-        if self._accumulated_step_time >= STEP_SECONDS:
+        if self._accumulated_step_time >= self._step_seconds:
             self._y_inc = 1
             self._accumulated_step_time = 0
         else:
             self._y_inc = 0
 
         return True, self.board.can_place_element(self._elements[0])
+
+    def _update_lines(self, *args, **kwargs):
+        if kwargs['lines'] == 4:
+            activate_shaking.send()
+
+        self.lines += kwargs['lines']
+        self.score += 10 * kwargs['lines']
+
+        current_lines.send(lines=self.lines)
+        current_score.send(score=self.score)
+
+    def _update_level(self, *args, **kwargs):
+        self.level += kwargs['level']
+        self._step_seconds -= 0.01
+        current_level.send(level=self.level)
+
+    def _add_listeners(self):
+        lines_cleared.connect(self._update_lines)
+        increase_level.connect(self._update_level)
 

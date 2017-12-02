@@ -18,6 +18,9 @@ from internal_config import SCORE_BOX_OFFSET, SCORE_BOX_SIZE, SCORE_BOX_BCK_COLO
 from internal_config import BLOCK_SIZE
 from internal_config import COLOR_GRAY1, COLOR_WHITE, COLOR_BLACK
 
+from game_events import current_lines, current_score, current_level, activate_shaking
+
+from board_effects.shaking import Shake
 
 class Screen(object):
 
@@ -27,7 +30,12 @@ class Screen(object):
         self._next_element = None
         self._board_offset = BOARD_OFFSET
         self._to_shake = False
-        # self._shaker = Shake(self._board_offset)
+        self._shaker = Shake(self._board_offset)
+        self._lines = 0
+        self._score = 0
+        self._level = 0
+
+        self._add_listeners()
 
     def set_board(self, board):
         self._board = board
@@ -35,22 +43,22 @@ class Screen(object):
     def set_next_element(self, element):
         self._next_element = element
 
-    def activate_shaking(self):
+    def _activate_shaking(self, *args, **kwargs):
         self._to_shake = True
-        # self._shaker = Shake(Config.BOARD_OFFSET)
+        self._shaker = Shake(BOARD_OFFSET)
 
     def draw(self):
         self._screen.fill(COLOR_BLACK)
 
-        # if self._to_shake:
-        #     try:
-        #         self._board_offset = self._shaker.next()
-        #     except StopIteration:
-        #         self._to_shake = False
+        if self._to_shake:
+            try:
+                self._board_offset = self._shaker.next()
+            except StopIteration:
+                self._to_shake = False
 
         self._draw_board()
-        self._draw_next_element()
-        self._draw_scores_box()
+        self._draw_next_element_box()
+        self._draw_score_box()
         self._draw_lines_box()
         self._draw_level_box()
 
@@ -81,12 +89,18 @@ class Screen(object):
 
                 pygame.draw.rect(self._screen, c, r, w)
 
-    def _draw_next_element(self):
+    def _draw_next_element_box(self):
         r = pygame.Rect(NXT_E_BOX_OFFSET.x,
                         NXT_E_BOX_OFFSET.y,
                         NXT_E_BOX_SIZE.x,
                         NXT_E_BOX_SIZE.y)
         pygame.draw.rect(self._screen, NXT_E_BCK_COLOR, r, 0)
+
+        label_font = pygame.font.SysFont("", 20)
+
+        label = label_font.render("NEXT", True, COLOR_GRAY1)
+        label_offset = pygame.Rect(NXT_E_BOX_OFFSET.x, NXT_E_BOX_OFFSET.y, NXT_E_BOX_OFFSET.x, NXT_E_BOX_OFFSET.y)
+        self._screen.blit(label, label_offset)
 
         s = self._next_element.size
 
@@ -99,26 +113,85 @@ class Screen(object):
                 if cell is not ELEMENT_FILL:
                     continue
                 r = pygame.Rect(NXT_E_BOX_OFFSET.x + e_offset.x + i * NXT_E_BLOCK_SIZE.x,
-                                NXT_E_BOX_OFFSET.y + e_offset.y + j * NXT_E_BLOCK_SIZE.y,
+                                NXT_E_BOX_OFFSET.y + 10 + e_offset.y + j * NXT_E_BLOCK_SIZE.y,
                                 NXT_E_BLOCK_SIZE.x,
                                 NXT_E_BLOCK_SIZE.y)
                 c = pygame.colordict.THECOLORS[ELEMENTS_COLORS[self._next_element.identifier]]
                 pygame.draw.rect(self._screen, c, r, 0)
 
-    def _draw_scores_box(self):
+    def _draw_score_box(self):
         r = pygame.Rect(SCORE_BOX_OFFSET.x, SCORE_BOX_OFFSET.y,
                         SCORE_BOX_SIZE.x, SCORE_BOX_SIZE.y)
 
         pygame.draw.rect(self._screen, SCORE_BOX_BCK_COLOR, r, 0)
 
+        label_font = pygame.font.SysFont("", 20)
+        value_font = pygame.font.SysFont("", 50)
+
+        label = label_font.render("SCORE", True, COLOR_GRAY1)
+        label_offset = pygame.Rect(SCORE_BOX_OFFSET.x, SCORE_BOX_OFFSET.y, SCORE_BOX_SIZE.x, SCORE_BOX_SIZE.y)
+        self._screen.blit(label, label_offset)
+
+        value = value_font.render('{}'.format(self._score), True, COLOR_WHITE)
+        value_rect = value.get_rect()
+        value_text_offset = pygame.Rect(SCORE_BOX_OFFSET.x,
+                                        SCORE_BOX_OFFSET.y + (SCORE_BOX_SIZE.y - value_rect.height)/2,
+                                        value_rect.width,
+                                        value_rect.height)
+        self._screen.blit(value, value_text_offset)
+
     def _draw_lines_box(self):
         r = pygame.Rect(LINES_BOX_OFFSET.x, LINES_BOX_OFFSET.y,
                         LINES_BOX_SIZE.x, LINES_BOX_SIZE.y)
-
         pygame.draw.rect(self._screen, LINES_BOX_BCK_COLOR, r, 0)
+
+        label_font = pygame.font.SysFont("", 20)
+        value_font = pygame.font.SysFont("", 50)
+
+        label = label_font.render("LINES", True, COLOR_GRAY1)
+        label_offset = pygame.Rect(LINES_BOX_OFFSET.x, LINES_BOX_OFFSET.y, LINES_BOX_SIZE.x, LINES_BOX_SIZE.y)
+        self._screen.blit(label, label_offset)
+
+        value = value_font.render('{}'.format(self._lines), True, COLOR_WHITE)
+        value_rect = value.get_rect()
+        value_text_offset = pygame.Rect(LINES_BOX_OFFSET.x,
+                                        LINES_BOX_OFFSET.y + (LINES_BOX_SIZE.y - value_rect.height)/2,
+                                        value_rect.width,
+                                        value_rect.height)
+        self._screen.blit(value, value_text_offset)
 
     def _draw_level_box(self):
         r = pygame.Rect(LEVEL_BOX_OFFSET.x, LEVEL_BOX_OFFSET.y,
                         LEVEL_BOX_SIZE.x, LEVEL_BOX_SIZE.y)
 
         pygame.draw.rect(self._screen, LEVEL_BOX_BCK_COLOR, r, 0)
+
+        label_font = pygame.font.SysFont("", 20)
+        value_font = pygame.font.SysFont("", 50)
+
+        label = label_font.render("LEVEL", True, COLOR_GRAY1)
+        label_offset = pygame.Rect(LEVEL_BOX_OFFSET.x, LEVEL_BOX_OFFSET.y, LEVEL_BOX_OFFSET.x, LEVEL_BOX_OFFSET.y)
+        self._screen.blit(label, label_offset)
+
+        value = value_font.render('{}'.format(self._level), True, COLOR_WHITE)
+        value_rect = value.get_rect()
+        value_text_offset = pygame.Rect(LEVEL_BOX_OFFSET.x,
+                                        LEVEL_BOX_OFFSET.y + (LEVEL_BOX_SIZE.y - value_rect.height)/2,
+                                        value_rect.width,
+                                        value_rect.height)
+        self._screen.blit(value, value_text_offset)
+
+    def _update_lines(self, *args, **kwargs):
+        self._lines = kwargs['lines']
+
+    def _update_score(self, *args, **kwargs):
+        self._score = kwargs['score']
+
+    def _update_level(self, *args, **kwargs):
+        self._level = kwargs['level']
+
+    def _add_listeners(self):
+        current_lines.connect(self._update_lines)
+        current_score.connect(self._update_score)
+        current_level.connect(self._update_level)
+        activate_shaking.connect(self._activate_shaking)
