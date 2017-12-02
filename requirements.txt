@@ -1,0 +1,2 @@
+blinker==1.4
+pygame==1.9.3
