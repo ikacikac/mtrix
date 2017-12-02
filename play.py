@@ -8,6 +8,7 @@ import pygame
 from game import Game
 from screen import Screen
 
+from internal_config import TITLE, ICON
 from internal_config import STATE_NEW_GAME, STATE_PLAYING, STATE_PAUSED, STATE_GAME_OVER
 from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_ESCAPE, MOVE_SMASH
 
@@ -45,6 +46,10 @@ if __name__ == '__main__':
     pygame.init()
     pygame.font.init()
 
+    pygame.display.set_caption(TITLE)
+    icon = pygame.image.load(ICON)
+    pygame.display.set_icon(icon)
+
     level_increaser = pygame.time.set_timer(pygame.USEREVENT + 1, 20000)
 
     screen = Screen()
@@ -61,9 +66,6 @@ if __name__ == '__main__':
         if user_key == MOVE_ESCAPE:
             print 'GAME OVER'
             break
-
-        # if user_key == MOVE_SMASH:
-        #     screen.activate_shaking()
 
         runnable, board = game.update(user_key)
 

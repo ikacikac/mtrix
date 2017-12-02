@@ -22,6 +22,7 @@ from game_events import current_lines, current_score, current_level, activate_sh
 
 from board_effects.shaking import Shake
 
+
 class Screen(object):
 
     def __init__(self):

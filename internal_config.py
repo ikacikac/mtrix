@@ -1,6 +1,7 @@
 # -*- coding: utf8 -*-
 
 from vectors import Vect2D
+
 # COLORS
 
 COLOR_BLACK = (0, 0, 0)
@@ -62,6 +63,9 @@ BOARD_MATRIX_BORDERS_WIDTH = 1
 
 
 # GAME
+
+TITLE = 'MTRIX'
+ICON = 'game.png'
 
 MOVE_LEFT = 1
 MOVE_UP = 2
