@@ -40,7 +40,7 @@ class PauseState(object):
 class GameOverState(object):
 
     def process_input(self, key):
-        if key in [MOVE_ESCAPE, MOVE_ENTER]:
+        if key in [MOVE_ESCAPE, MOVE_PAUSE]:
             return HomeState()
         else:
             return self

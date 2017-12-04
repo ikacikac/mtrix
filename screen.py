@@ -3,7 +3,7 @@
 import pygame
 from pygame.colordict import THECOLORS
 
-from element import ELEMENTS_IDS, ELEMENTS_COLORS
+from element import Element, ELEMENTS_IDS, ELEMENTS_COLORS
 
 from internal_config import SCREEN_HEIGHT, SCREEN_WIDTH
 from internal_config import BOARD_OFFSET, BOARD_MATRIX_BORDERS, BOARD_MATRIX_BORDERS_WIDTH, BOARD_MATRIX_BORDERS_COLOR
@@ -58,6 +58,20 @@ class Screen(object):
                                    label_rect.width, label_rect.height)
         self._screen.blit(label, label_offset)
 
+        label_font = pygame.font.SysFont("", 20)
+
+        label = label_font.render("Play/Pause (P)", True, COLOR_GRAY1)
+        label_rect = label.get_rect()
+        label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
+                                   label_rect.width, label_rect.height)
+        self._screen.blit(label, label_offset)
+
+        label = label_font.render("Quit (ESC)", True, COLOR_GRAY1)
+        label_rect = label.get_rect()
+        label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 40,
+                                   label_rect.width, label_rect.height)
+        self._screen.blit(label, label_offset)
+
         pygame.display.update()
 
     def draw_pause_screen(self):
@@ -71,6 +85,14 @@ class Screen(object):
                                    label_rect.width, label_rect.height)
         self._screen.blit(label, label_offset)
 
+        label_font = pygame.font.SysFont("", 20)
+
+        label = label_font.render("Unpause (P)", True, COLOR_GRAY1)
+        label_rect = label.get_rect()
+        label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
+                                   label_rect.width, label_rect.height)
+        self._screen.blit(label, label_offset)
+
         pygame.display.update()
 
     def draw_game_over_screen(self):
@@ -81,6 +103,14 @@ class Screen(object):
         label = label_font.render("GAME OVER", True, COLOR_GRAY1)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
+                                   label_rect.width, label_rect.height)
+        self._screen.blit(label, label_offset)
+
+        label_font = pygame.font.SysFont("", 20)
+
+        label = label_font.render("Home Screen (P/ESC)", True, COLOR_GRAY1)
+        label_rect = label.get_rect()
+        label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
                                    label_rect.width, label_rect.height)
         self._screen.blit(label, label_offset)
 
