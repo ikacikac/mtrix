@@ -73,11 +73,10 @@ class Game(object):
         try:
             self.board.can_place_element(self._elements[0])
         except ColException, er:
-            return False, None
+            self.board.add_element(self._elements[0])
+            return False, self.board
 
         possible_moves = get_possible_movements(self.board, self._elements[0])
-
-        # print possible_moves
 
         if user_key in possible_moves:
             if user_key == MOVE_UP:
@@ -117,6 +116,19 @@ class Game(object):
 
         self.lines += kwargs['lines']
         self.score += 10 * kwargs['lines']
+
+        if self.score < 200:
+            current_level.send(level=1)
+        elif 200 < self.score <= 300:
+            current_level.send(level=2)
+        elif 300 < self.score <= 400:
+            current_level.send(level=3)
+        elif 400 < self.score <= 600:
+            current_level.send(level=4)
+        elif 600 < self.score <= 700:
+            current_level.send(level=5)
+        elif self.score <= 1000:
+            current_level.send(level=6)
 
         current_lines.send(lines=self.lines)
         current_score.send(score=self.score)

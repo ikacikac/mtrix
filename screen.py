@@ -24,7 +24,6 @@ from board_effects.shaking import Shake
 
 
 class Screen(object):
-
     def __init__(self):
         self._screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self._board = None
@@ -48,7 +47,46 @@ class Screen(object):
         self._to_shake = True
         self._shaker = Shake(BOARD_OFFSET)
 
-    def draw(self):
+    def draw_home_screen(self):
+        self._screen.fill(COLOR_BLACK)
+
+        label_font = pygame.font.SysFont("", 30)
+
+        label = label_font.render("Welcome to MTRIX", True, COLOR_GRAY1)
+        label_rect = label.get_rect()
+        label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
+                                   label_rect.width, label_rect.height)
+        self._screen.blit(label, label_offset)
+
+        pygame.display.update()
+
+    def draw_pause_screen(self):
+        self._screen.fill(COLOR_BLACK)
+
+        label_font = pygame.font.SysFont("", 30)
+
+        label = label_font.render("PAUSED", True, COLOR_GRAY1)
+        label_rect = label.get_rect()
+        label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
+                                   label_rect.width, label_rect.height)
+        self._screen.blit(label, label_offset)
+
+        pygame.display.update()
+
+    def draw_game_over_screen(self):
+        self._screen.fill(COLOR_BLACK)
+
+        label_font = pygame.font.SysFont("", 30)
+
+        label = label_font.render("GAME OVER", True, COLOR_GRAY1)
+        label_rect = label.get_rect()
+        label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
+                                   label_rect.width, label_rect.height)
+        self._screen.blit(label, label_offset)
+
+        pygame.display.update()
+
+    def draw_game_play(self):
         self._screen.fill(COLOR_BLACK)
 
         if self._to_shake:
@@ -105,9 +143,7 @@ class Screen(object):
 
         s = self._next_element.size
 
-        o = (NXT_E_BOX_SIZE - NXT_E_BLOCK_SIZE * s)/2
-
-        e_offset = o
+        e_offset = (NXT_E_BOX_SIZE - NXT_E_BLOCK_SIZE * s) / 2
 
         for j, row in enumerate(self._next_element):
             for i, cell in enumerate(row):
@@ -136,7 +172,7 @@ class Screen(object):
         value = value_font.render('{}'.format(self._score), True, COLOR_WHITE)
         value_rect = value.get_rect()
         value_text_offset = pygame.Rect(SCORE_BOX_OFFSET.x,
-                                        SCORE_BOX_OFFSET.y + (SCORE_BOX_SIZE.y - value_rect.height)/2,
+                                        SCORE_BOX_OFFSET.y + (SCORE_BOX_SIZE.y - value_rect.height) / 2,
                                         value_rect.width,
                                         value_rect.height)
         self._screen.blit(value, value_text_offset)
@@ -156,7 +192,7 @@ class Screen(object):
         value = value_font.render('{}'.format(self._lines), True, COLOR_WHITE)
         value_rect = value.get_rect()
         value_text_offset = pygame.Rect(LINES_BOX_OFFSET.x,
-                                        LINES_BOX_OFFSET.y + (LINES_BOX_SIZE.y - value_rect.height)/2,
+                                        LINES_BOX_OFFSET.y + (LINES_BOX_SIZE.y - value_rect.height) / 2,
                                         value_rect.width,
                                         value_rect.height)
         self._screen.blit(value, value_text_offset)
@@ -177,7 +213,7 @@ class Screen(object):
         value = value_font.render('{}'.format(self._level), True, COLOR_WHITE)
         value_rect = value.get_rect()
         value_text_offset = pygame.Rect(LEVEL_BOX_OFFSET.x,
-                                        LEVEL_BOX_OFFSET.y + (LEVEL_BOX_SIZE.y - value_rect.height)/2,
+                                        LEVEL_BOX_OFFSET.y + (LEVEL_BOX_SIZE.y - value_rect.height) / 2,
                                         value_rect.width,
                                         value_rect.height)
         self._screen.blit(value, value_text_offset)
