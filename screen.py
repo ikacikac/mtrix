@@ -16,7 +16,7 @@ from internal_config import LINES_BOX_OFFSET, LINES_BOX_SIZE, LINES_BOX_BCK_COLO
 from internal_config import SCORE_BOX_OFFSET, SCORE_BOX_SIZE, SCORE_BOX_BCK_COLOR
 
 from internal_config import BLOCK_SIZE
-from internal_config import COLOR_GRAY1, COLOR_WHITE, COLOR_BLACK, COLOR_BLACK_TINT
+from internal_config import COLOR_GRAY1, COLOR_WHITE, COLOR_BLACK
 
 from game_events import current_lines, current_score, current_level, activate_shaking
 
@@ -52,7 +52,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 30)
 
-        label = label_font.render("Welcome to MTRIX", True, COLOR_GRAY1)
+        label = label_font.render("Welcome to MTRIX", True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
                                    label_rect.width, label_rect.height)
@@ -60,13 +60,13 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 20)
 
-        label = label_font.render("Play/Pause (P)", True, COLOR_GRAY1)
+        label = label_font.render("Play/Pause (P)", True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
                                    label_rect.width, label_rect.height)
         self._screen.blit(label, label_offset)
 
-        label = label_font.render("Quit (ESC)", True, COLOR_GRAY1)
+        label = label_font.render("Quit (ESC)", True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 40,
                                    label_rect.width, label_rect.height)
@@ -74,13 +74,13 @@ class Screen(object):
 
     def draw_pause_screen(self):
         tint_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        tint_surface.set_alpha(100)
+        tint_surface.set_alpha(200)
         tint_surface.fill(COLOR_BLACK)
         self._screen.blit(tint_surface, (0, 0))
 
         label_font = pygame.font.SysFont("", 30)
 
-        label = label_font.render("PAUSED", True, COLOR_GRAY1)
+        label = label_font.render("PAUSED", True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
                                    label_rect.width, label_rect.height)
@@ -88,7 +88,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 20)
 
-        label = label_font.render("Unpause (P)", True, COLOR_GRAY1)
+        label = label_font.render("Unpause (P)", True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
                                    label_rect.width, label_rect.height)
@@ -96,13 +96,13 @@ class Screen(object):
 
     def draw_game_over_screen(self):
         tint_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-        tint_surface.set_alpha(100)
+        tint_surface.set_alpha(200)
         tint_surface.fill(COLOR_BLACK)
         self._screen.blit(tint_surface, (0, 0))
 
         label_font = pygame.font.SysFont("", 30)
 
-        label = label_font.render("GAME OVER", True, COLOR_GRAY1)
+        label = label_font.render("GAME OVER", True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
                                    label_rect.width, label_rect.height)
@@ -110,7 +110,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 20)
 
-        label = label_font.render("Home Screen (P)", True, COLOR_GRAY1)
+        label = label_font.render("Home Screen (P)", True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
                                    label_rect.width, label_rect.height)
