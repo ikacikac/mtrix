@@ -16,7 +16,7 @@ from internal_config import LINES_BOX_OFFSET, LINES_BOX_SIZE, LINES_BOX_BCK_COLO
 from internal_config import SCORE_BOX_OFFSET, SCORE_BOX_SIZE, SCORE_BOX_BCK_COLOR
 
 from internal_config import BLOCK_SIZE
-from internal_config import COLOR_GRAY1, COLOR_WHITE, COLOR_BLACK
+from internal_config import COLOR_GRAY1, COLOR_WHITE, COLOR_BLACK, COLOR_BLACK_TINT
 
 from game_events import current_lines, current_score, current_level, activate_shaking
 
@@ -33,7 +33,7 @@ class Screen(object):
         self._shaker = Shake(self._board_offset)
         self._lines = 0
         self._score = 0
-        self._level = 0
+        self._level = 1
 
         self._add_listeners()
 
@@ -72,10 +72,11 @@ class Screen(object):
                                    label_rect.width, label_rect.height)
         self._screen.blit(label, label_offset)
 
-        pygame.display.update()
-
     def draw_pause_screen(self):
-        self._screen.fill(COLOR_BLACK)
+        tint_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        tint_surface.set_alpha(100)
+        tint_surface.fill(COLOR_BLACK)
+        self._screen.blit(tint_surface, (0, 0))
 
         label_font = pygame.font.SysFont("", 30)
 
@@ -93,10 +94,11 @@ class Screen(object):
                                    label_rect.width, label_rect.height)
         self._screen.blit(label, label_offset)
 
-        pygame.display.update()
-
     def draw_game_over_screen(self):
-        self._screen.fill(COLOR_BLACK)
+        tint_surface = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+        tint_surface.set_alpha(100)
+        tint_surface.fill(COLOR_BLACK)
+        self._screen.blit(tint_surface, (0, 0))
 
         label_font = pygame.font.SysFont("", 30)
 
@@ -108,13 +110,11 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 20)
 
-        label = label_font.render("Home Screen (P/ESC)", True, COLOR_GRAY1)
+        label = label_font.render("Home Screen (P)", True, COLOR_GRAY1)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
                                    label_rect.width, label_rect.height)
         self._screen.blit(label, label_offset)
-
-        pygame.display.update()
 
     def draw_game_play(self):
         self._screen.fill(COLOR_BLACK)
@@ -130,8 +130,6 @@ class Screen(object):
         self._draw_score_box()
         self._draw_lines_box()
         self._draw_level_box()
-
-        pygame.display.update()
 
     def _draw_board(self):
         raw_board = self._board.get_raw()
