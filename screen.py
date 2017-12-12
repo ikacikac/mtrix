@@ -3,11 +3,11 @@
 import pygame
 from pygame.colordict import THECOLORS
 
-from element import Element, ELEMENTS_IDS, ELEMENTS_COLORS
+from element import ELEMENTS_IDS, ELEMENTS_COLORS
 
 from internal_config import SCREEN_HEIGHT, SCREEN_WIDTH
 from internal_config import BOARD_OFFSET, BOARD_MATRIX_BORDERS, BOARD_MATRIX_BORDERS_WIDTH, BOARD_MATRIX_BORDERS_COLOR
-from internal_config import ELEMENT_BLANK, ELEMENT_FILL
+from internal_config import ELEMENT_FILL
 from internal_config import BACKGROUND_FILL, BACKGROUND_COLOR
 from internal_config import NXT_E_BLOCK_SIZE, NXT_E_BOX_OFFSET, NXT_E_BOX_SIZE, NXT_E_BCK_COLOR
 

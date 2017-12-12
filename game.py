@@ -5,7 +5,7 @@ from time import time
 from board import Board
 from element import Element, get_possible_movements
 
-from game_events import lines_cleared, level_increased
+from game_events import lines_cleared
 from game_events import current_lines, current_score, current_level
 from game_events import increase_level
 from game_events import activate_shaking
@@ -13,7 +13,7 @@ from game_events import activate_shaking
 from game_exceptions import ColException
 
 from internal_config import BOARD_HEIGHT, BOARD_WIDTH
-from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_SMASH, MOVE_ESCAPE
+from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_SMASH
 from internal_config import STEP_SECONDS, STEP_CHANGE
 
 
@@ -150,9 +150,6 @@ class Game(object):
         current_score.send(score=self.score)
 
     def _update_level(self):
-        # lvl = None
-        # step_second = None
-
         for lvl, score, step_second in self._level_score_ranges:
             if self.score < score:
                 self.level = lvl
@@ -163,7 +160,6 @@ class Game(object):
         self.level = len(self._level_score_ranges)
         self._step_seconds = 0.05
         current_level.send(level=self.level)
-
 
     def _add_listeners(self):
         lines_cleared.connect(self._update_lines)

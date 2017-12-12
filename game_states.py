@@ -3,7 +3,7 @@
 
 import pygame
 
-from internal_config import MOVE_ENTER, MOVE_PAUSE, MOVE_ESCAPE, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT
+from internal_config import MOVE_ENTER, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT
 from game import Game
 from screen import Screen
 

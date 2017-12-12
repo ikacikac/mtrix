@@ -2,7 +2,6 @@
 
 
 from copy import deepcopy
-from blinker import signal
 
 from game_events import lines_cleared
 
@@ -11,7 +10,7 @@ from game_exceptions import *
 from element import Element
 
 from internal_config import WALL_LEFT, WALL_RIGHT, FLOOR, BACKGROUND_FILL
-from internal_config import ELEMENT_FILL, ELEMENT_BLANK
+from internal_config import ELEMENT_BLANK
 from internal_config import BOARD_HEIGHT, BOARD_WIDTH
 
 

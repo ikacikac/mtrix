@@ -5,7 +5,7 @@ from random import randrange
 
 from internal_config import NEW_ELEMENT_X, NEW_ELEMENT_Y
 from internal_config import ELEMENT_BLANK, ELEMENT_FILL
-from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_ESCAPE, MOVE_SMASH
+from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_SMASH
 
 from game_exceptions import MovementException
 
