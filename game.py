@@ -14,7 +14,7 @@ from game_exceptions import ColException
 
 from internal_config import BOARD_HEIGHT, BOARD_WIDTH
 from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_SMASH, MOVE_ESCAPE
-from internal_config import STEP_SECONDS
+from internal_config import STEP_SECONDS, STEP_CHANGE
 
 
 class Game(object):
@@ -25,6 +25,7 @@ class Game(object):
     :param [Element] _elements:
 
     """
+
     def __init__(self):
         self.board = Board.create_board(BOARD_HEIGHT, BOARD_WIDTH)
         # self._to_update = False
@@ -38,6 +39,14 @@ class Game(object):
         self.score = 0
         self.level = 1
         self.lines = 0
+
+        self._level_score_ranges = [
+            (1, 30, STEP_SECONDS),
+            (2, 50, STEP_SECONDS - (STEP_SECONDS * STEP_CHANGE)),
+            (3, 70, STEP_SECONDS - (STEP_SECONDS * 2 * STEP_CHANGE)),
+            (4, 80, STEP_SECONDS - (STEP_SECONDS * 3 * STEP_CHANGE)),
+            (5, 90, STEP_SECONDS - (STEP_SECONDS * 4 * STEP_CHANGE)),
+        ]
 
         current_lines.send(lines=self.lines)
         current_score.send(score=self.score)
@@ -110,35 +119,52 @@ class Game(object):
 
         return True, self.board.can_place_element(self._elements[0])
 
+    def _get_score_from_lines(self, lines):
+        """
+
+        :param [int] lines:
+        :return:
+        """
+        score = 0
+
+        for i in lines:
+            score += BOARD_HEIGHT - i
+
+        if len(lines) == 4:
+            score += 10
+
+        return score
+
     def _update_lines(self, *args, **kwargs):
-        if kwargs['lines'] == 4:
+        lines = kwargs['lines']
+
+        if len(lines) == 4:
             activate_shaking.send()
 
-        self.lines += kwargs['lines']
-        self.score += 10 * kwargs['lines']
+        self.lines += len(kwargs['lines'])
+        self.score += self._get_score_from_lines(lines)
 
-        if self.score < 200:
-            current_level.send(level=1)
-        elif 200 < self.score <= 300 and self.level == 1:
-            increase_level.send(level=2)
-        elif 300 < self.score <= 400 and self.level == 2:
-            increase_level.send(level=3)
-        elif 400 < self.score <= 600 and self.level == 3:
-            increase_level.send(level=4)
-        elif 600 < self.score <= 700 and self.level == 4:
-            increase_level.send(level=5)
-        elif self.score <= 1000 and self.level == 5:
-            increase_level.send(level=6)
+        self._update_level()
 
         current_lines.send(lines=self.lines)
         current_score.send(score=self.score)
 
-    def _update_level(self, *args, **kwargs):
-        self.level += kwargs['level']
-        self._step_seconds -= 0.01
+    def _update_level(self):
+        # lvl = None
+        # step_second = None
+
+        for lvl, score, step_second in self._level_score_ranges:
+            if self.score < score:
+                self.level = lvl
+                self._step_seconds = step_second
+                current_level.send(level=self.level)
+                return
+
+        self.level = len(self._level_score_ranges)
+        self._step_seconds = 0.05
         current_level.send(level=self.level)
+
 
     def _add_listeners(self):
         lines_cleared.connect(self._update_lines)
         increase_level.connect(self._update_level)
-

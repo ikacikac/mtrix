@@ -77,4 +77,4 @@ MOVE_ENTER = 6
 MOVE_PAUSE = 7
 
 STEP_SECONDS = 0.1
-
+STEP_CHANGE = 0.1  # should be < 1

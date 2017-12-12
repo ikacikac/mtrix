@@ -87,7 +87,7 @@ class Board(object):
 
         self._board = self._board[:BOARD_HEIGHT + 1]
 
-        lines_cleared.send(lines=len(filled_rows))
+        lines_cleared.send(lines=filled_rows)
 
     def add_element(self, element):
         """
