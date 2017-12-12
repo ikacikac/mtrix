@@ -119,16 +119,16 @@ class Game(object):
 
         if self.score < 200:
             current_level.send(level=1)
-        elif 200 < self.score <= 300:
-            current_level.send(level=2)
-        elif 300 < self.score <= 400:
-            current_level.send(level=3)
-        elif 400 < self.score <= 600:
-            current_level.send(level=4)
-        elif 600 < self.score <= 700:
-            current_level.send(level=5)
-        elif self.score <= 1000:
-            current_level.send(level=6)
+        elif 200 < self.score <= 300 and self.level == 1:
+            increase_level.send(level=2)
+        elif 300 < self.score <= 400 and self.level == 2:
+            increase_level.send(level=3)
+        elif 400 < self.score <= 600 and self.level == 3:
+            increase_level.send(level=4)
+        elif 600 < self.score <= 700 and self.level == 4:
+            increase_level.send(level=5)
+        elif self.score <= 1000 and self.level == 5:
+            increase_level.send(level=6)
 
         current_lines.send(lines=self.lines)
         current_score.send(score=self.score)
