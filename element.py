@@ -42,43 +42,40 @@ def get_possible_movements(board, element):
     :return:
 
     """
-
-    # TODO Without deep copies, totally unnecessary
-
-    e_l = deepcopy(element)
-    e_l.x -= 1
-
-    e_r = deepcopy(element)
-    e_r.x += 1
-
-    e_o = deepcopy(element)
-    e_o.rotate()
-
-    e_d = deepcopy(element)
-    e_d.y += 1
-
     possible_moves = [MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN, MOVE_SMASH]
 
     try:
-        board.can_place_element(e_l)
+        element.x -= 1
+        board.can_place_element(element)
     except MovementException:
         possible_moves.pop(possible_moves.index(MOVE_LEFT))
+    finally:
+        element.x += 1
 
     try:
-        board.can_place_element(e_r)
+        element.x += 1
+        board.can_place_element(element)
     except MovementException:
         possible_moves.pop(possible_moves.index(MOVE_RIGHT))
+    finally:
+        element.x -= 1
 
     try:
-        board.can_place_element(e_o)
+        element.rotate()
+        board.can_place_element(element)
     except MovementException:
         possible_moves.pop(possible_moves.index(MOVE_UP))
+    finally:
+        element.rotate(reverse=True)
 
     try:
-        board.can_place_element(e_d)
+        element.y += 1
+        board.can_place_element(element)
     except MovementException:
         possible_moves.pop(possible_moves.index(MOVE_DOWN))
         possible_moves.pop(possible_moves.index(MOVE_SMASH))
+    finally:
+        element.y -= 1
 
     return possible_moves
 
@@ -91,8 +88,11 @@ class Element(object):
         self.size = len(element)
         self.identifier = identifier
 
-    def rotate(self):
-        self._element = zip(*reversed(self._element))
+    def rotate(self, reverse=False):
+        if reverse is True:
+            self._element = [i for i in reversed(zip(*self._element))]
+        else:
+            self._element = zip(*reversed(self._element))
 
     def get_raw(self):
         return self._element
