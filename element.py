@@ -34,6 +34,33 @@ ELEMENTS_COLORS = {
 raw_elements = zip(ELEMENTS_IDS, elements)
 
 
+def try_to_rotate(board, element):
+    """
+
+    :param Board board:
+    :param Element element:
+    :return:
+    """
+    s = element.size
+    x = element.x
+
+    inc = 1
+    if board.width/2 < element.x:
+        inc = -1
+
+    for i in range(0, s/2+1):
+        element.x = x + inc * i
+        try:
+            element.rotate()
+            board.can_place_element(element)
+            return
+        except MovementException:
+            element.rotate(reverse=True)
+            continue
+
+    element.x = x
+
+
 def get_possible_movements(board, element):
     """
 

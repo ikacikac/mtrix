@@ -3,7 +3,7 @@
 from time import time
 
 from board import Board
-from element import Element, get_possible_movements
+from element import Element, get_possible_movements, try_to_rotate
 
 from game_events import lines_cleared
 from game_events import current_lines, current_score, current_level
@@ -35,6 +35,9 @@ class Game(object):
         self._elements = [Element.get_new_element(), Element.get_new_element()]
         self._last_updated = time()
         self._step_seconds = STEP_SECONDS
+
+        self._preparing_to_add = False
+        self._to_add = False
 
         self.score = 0
         self.level = 1
@@ -78,6 +81,9 @@ class Game(object):
         if self._take_next:
             self._get_element()
             self._take_next = False
+            self._to_add = False
+            self._preparing_to_add = False
+            self._accumulated_step_time = 0
 
         try:
             self.board.can_place_element(self._elements[0])
@@ -85,12 +91,13 @@ class Game(object):
             self.board.add_element(self._elements[0])
             return False, self.board
 
+        if user_key == MOVE_UP:
+            try_to_rotate(self.board, self._elements[0])
+
         possible_moves = get_possible_movements(self.board, self._elements[0])
 
         if user_key in possible_moves:
-            if user_key == MOVE_UP:
-                self._elements[0].rotate()
-            elif user_key == MOVE_RIGHT:
+            if user_key == MOVE_RIGHT:
                 self._elements[0].x += 1
             elif user_key == MOVE_LEFT:
                 self._elements[0].x -= 1
@@ -99,21 +106,35 @@ class Game(object):
             elif user_key == MOVE_SMASH:
                 dy = self.board.get_smashed_position_dy(self._elements[0])
                 self._elements[0].y += dy
+                self._to_add = True
 
-        possible_moves = get_possible_movements(self.board, self._elements[0])
-
-        if MOVE_DOWN not in possible_moves:
+        if self._to_add is True:
             self.board.add_element(self._elements[0])
             self._take_next = True
             return True, self.board
 
-        self._elements[0].y += self._y_inc
+        possible_moves = get_possible_movements(self.board, self._elements[0])
+
+        if MOVE_DOWN not in possible_moves:
+            if self._preparing_to_add is False:
+                self._preparing_to_add = True
+                self._accumulated_step_time = 0
+        else:
+            self._preparing_to_add = False
+
+        if self._preparing_to_add is False:
+            self._elements[0].y += self._y_inc
 
         self._accumulated_step_time += time() - start_step
 
         if self._accumulated_step_time >= self._step_seconds:
-            self._y_inc = 1
-            self._accumulated_step_time = 0
+            if self._preparing_to_add is True:
+                self.board.add_element(self._elements[0])
+                self._take_next = True
+                return True, self.board
+            else:
+                self._y_inc = 1
+                self._accumulated_step_time = 0
         else:
             self._y_inc = 0
 
