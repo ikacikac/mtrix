@@ -3,10 +3,18 @@
 
 Hello there!
 
-This is my Tetris clone implemented using:
+Mtrix is a Tetris clone. It is implemented using:
  * pygame
  * blinker
  * Python2.7
+
+## Screens
+
+![mtrix_init_screen](https://ikacikax.files.wordpress.com/2018/02/mtrix_initial_screen1.png)
+![mtrix_gameplay_screen](https://ikacikax.files.wordpress.com/2018/02/mtrix_gameplay1.png)
+![mtrix_paused_screen](https://ikacikax.files.wordpress.com/2018/02/mtrix_paused1.png)
+![mtrix_gameover_screen](https://ikacikax.files.wordpress.com/2018/02/mtrix_game_over1.png)
+
 
 ## Installation
 
