@@ -1,17 +1,23 @@
-# -*- cofing: utf8 -*-
+#!/usr/bin/env python2.7
+# -*- coding: utf8 -*-
+"""
+
+Board is used to hold current elements that are fixed in it.
+Also, it provides methods for particular board instance that
+ give user ability to check if certain element can be placed on it or smashed.
 
 
+"""
 from copy import deepcopy
 
-from game_events import lines_cleared
+from game.element import Element
+from game.exceptions import *
 
-from game_exceptions import *
+from game.config import WALL_LEFT, WALL_RIGHT, FLOOR, BACKGROUND_FILL
+from game.config import ELEMENT_BLANK
+from game.config import BOARD_HEIGHT, BOARD_WIDTH
 
-from element import Element
-
-from internal_config import WALL_LEFT, WALL_RIGHT, FLOOR, BACKGROUND_FILL
-from internal_config import ELEMENT_BLANK
-from internal_config import BOARD_HEIGHT, BOARD_WIDTH
+from utils.events import lines_cleared
 
 
 class Board(object):

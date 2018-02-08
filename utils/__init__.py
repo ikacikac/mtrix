@@ -1,4 +1,14 @@
-#!/usr/bin/env python2.7
+# -*- coding: utf8 -*-
+
+"""
+Game utilities
+
+
+Included are:
+- Vect2D helper class for 2D vector representation and operations,
+- Events that are risen and that can be connected to.
+
+"""
 
 
 class Vect2D(object):

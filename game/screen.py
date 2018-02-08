@@ -1,26 +1,34 @@
 # -*- coding: utf8 -*-
+"""
 
+Screen is used for drawing screens and elements for each game state.
+
+"""
 import pygame
+
 from pygame.colordict import THECOLORS
 
-from element import ELEMENTS_IDS, ELEMENTS_COLORS
+from element import ELEMENTS_IDS
 
-from internal_config import SCREEN_HEIGHT, SCREEN_WIDTH
-from internal_config import BOARD_OFFSET, BOARD_MATRIX_BORDERS, BOARD_MATRIX_BORDERS_WIDTH, BOARD_MATRIX_BORDERS_COLOR
-from internal_config import ELEMENT_FILL
-from internal_config import BACKGROUND_FILL, BACKGROUND_COLOR
-from internal_config import NXT_E_BLOCK_SIZE, NXT_E_BOX_OFFSET, NXT_E_BOX_SIZE, NXT_E_BCK_COLOR
+from game.config import ELEMENTS_COLORS
+from game.config import SCREEN_HEIGHT, SCREEN_WIDTH
+from game.config import BOARD_OFFSET, BOARD_MATRIX_BORDERS, BOARD_MATRIX_BORDERS_WIDTH, BOARD_MATRIX_BORDERS_COLOR
+from game.config import ELEMENT_FILL
+from game.config import BACKGROUND_FILL, BACKGROUND_COLOR
+from game.config import NXT_E_BLOCK_SIZE, NXT_E_BOX_OFFSET, NXT_E_BOX_SIZE, NXT_E_BCK_COLOR
 
-from internal_config import LEVEL_BOX_OFFSET, LEVEL_BOX_SIZE, LEVEL_BOX_BCK_COLOR
-from internal_config import LINES_BOX_OFFSET, LINES_BOX_SIZE, LINES_BOX_BCK_COLOR
-from internal_config import SCORE_BOX_OFFSET, SCORE_BOX_SIZE, SCORE_BOX_BCK_COLOR
+from game.config import LEVEL_BOX_OFFSET, LEVEL_BOX_SIZE, LEVEL_BOX_BCK_COLOR
+from game.config import LINES_BOX_OFFSET, LINES_BOX_SIZE, LINES_BOX_BCK_COLOR
+from game.config import SCORE_BOX_OFFSET, SCORE_BOX_SIZE, SCORE_BOX_BCK_COLOR
 
-from internal_config import BLOCK_SIZE
-from internal_config import COLOR_GRAY1, COLOR_WHITE, COLOR_BLACK
+from game.config import MSG_WELCOME, MSG_USAGE1, MSG_USAGE2, MSG_PAUSED, MSG_UNPAUSE, MSG_GO_HOME, MSG_GAME_OVER
+from game.config import LBL_NEXT, LBL_SCORE, LBL_LINES
+from game.config import BLOCK_SIZE
+from game.config import COLOR_GRAY1, COLOR_WHITE, COLOR_BLACK
 
-from game_events import current_lines, current_score, current_level, activate_shaking
+from utils.events import current_lines, current_score, current_level, activate_shaking
 
-from board_effects.shaking import Shake
+from game.effects.shaking import Shake
 
 
 class Screen(object):
@@ -52,7 +60,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 30)
 
-        label = label_font.render("Welcome to MTRIX", True, COLOR_WHITE)
+        label = label_font.render(MSG_WELCOME, True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
                                    label_rect.width, label_rect.height)
@@ -60,13 +68,13 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 20)
 
-        label = label_font.render("Play/Pause (P)", True, COLOR_WHITE)
+        label = label_font.render(MSG_USAGE1, True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
                                    label_rect.width, label_rect.height)
         self._screen.blit(label, label_offset)
 
-        label = label_font.render("Quit (ESC)", True, COLOR_WHITE)
+        label = label_font.render(MSG_USAGE2, True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 40,
                                    label_rect.width, label_rect.height)
@@ -80,7 +88,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 30)
 
-        label = label_font.render("PAUSED", True, COLOR_WHITE)
+        label = label_font.render(MSG_PAUSED, True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
                                    label_rect.width, label_rect.height)
@@ -88,7 +96,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 20)
 
-        label = label_font.render("Unpause (P)", True, COLOR_WHITE)
+        label = label_font.render(MSG_UNPAUSE, True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
                                    label_rect.width, label_rect.height)
@@ -102,7 +110,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 30)
 
-        label = label_font.render("GAME OVER", True, COLOR_WHITE)
+        label = label_font.render(MSG_GAME_OVER, True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2,
                                    label_rect.width, label_rect.height)
@@ -110,7 +118,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 20)
 
-        label = label_font.render("Home Screen (P)", True, COLOR_WHITE)
+        label = label_font.render(MSG_GO_HOME, True, COLOR_WHITE)
         label_rect = label.get_rect()
         label_offset = pygame.Rect((SCREEN_WIDTH - label_rect.width) / 2, (SCREEN_HEIGHT - label_rect.height) / 2 + 20,
                                    label_rect.width, label_rect.height)
@@ -165,7 +173,7 @@ class Screen(object):
 
         label_font = pygame.font.SysFont("", 20)
 
-        label = label_font.render("NEXT", True, COLOR_GRAY1)
+        label = label_font.render(LBL_NEXT, True, COLOR_GRAY1)
         label_offset = pygame.Rect(NXT_E_BOX_OFFSET.x, NXT_E_BOX_OFFSET.y, NXT_E_BOX_OFFSET.x, NXT_E_BOX_OFFSET.y)
         self._screen.blit(label, label_offset)
 
@@ -193,7 +201,7 @@ class Screen(object):
         label_font = pygame.font.SysFont("", 20)
         value_font = pygame.font.SysFont("", 50)
 
-        label = label_font.render("SCORE", True, COLOR_GRAY1)
+        label = label_font.render(LBL_SCORE, True, COLOR_GRAY1)
         label_offset = pygame.Rect(SCORE_BOX_OFFSET.x, SCORE_BOX_OFFSET.y, SCORE_BOX_SIZE.x, SCORE_BOX_SIZE.y)
         self._screen.blit(label, label_offset)
 
@@ -213,7 +221,7 @@ class Screen(object):
         label_font = pygame.font.SysFont("", 20)
         value_font = pygame.font.SysFont("", 50)
 
-        label = label_font.render("LINES", True, COLOR_GRAY1)
+        label = label_font.render(LBL_LINES, True, COLOR_GRAY1)
         label_offset = pygame.Rect(LINES_BOX_OFFSET.x, LINES_BOX_OFFSET.y, LINES_BOX_SIZE.x, LINES_BOX_SIZE.y)
         self._screen.blit(label, label_offset)
 

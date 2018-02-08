@@ -1,24 +1,36 @@
 #!/usr/bin/env python2.7
+# -*- coding: utf8 -*-
+"""
 
+Game handles game play state.
+
+"""
 from time import time
 
 from board import Board
 from element import Element, get_possible_movements, try_to_rotate
 
-from game_events import lines_cleared
-from game_events import current_lines, current_score, current_level
-from game_events import increase_level
-from game_events import activate_shaking
+from utils.events import lines_cleared
+from utils.events import current_lines, current_score, current_level
+from utils.events import increase_level
+from utils.events import activate_shaking
 
-from game_exceptions import ColException
+from game.exceptions import ColException
 
-from internal_config import BOARD_HEIGHT, BOARD_WIDTH
-from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_SMASH
-from internal_config import STEP_SECONDS, STEP_CHANGE
+from game.config import BOARD_HEIGHT, BOARD_WIDTH
+from game.config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_SMASH
+from game.config import STEP_SECONDS, STEP_CHANGE
 
 
 class Game(object):
     """
+    Game holds gameplay state.
+
+    It:
+    - Initiates board,
+    - List of next elements,
+    - Handles user input,
+    - Handles updates on stats.
 
     :param Board board:
     :param bool _take_next:

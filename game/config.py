@@ -1,6 +1,11 @@
 # -*- coding: utf8 -*-
 
-from vectors import Vect2D
+import os
+
+from utils import Vect2D
+
+PROJ_PATH = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+MEDIA_PATH = os.path.join(PROJ_PATH, 'media')
 
 # COLORS
 
@@ -21,6 +26,15 @@ ELEMENT_BLANK = ' '
 
 BLOCK_SIZE = 25  # pixels
 
+ELEMENTS_COLORS = {
+    '1': 'red',
+    '2': 'blue',
+    '3': 'yellow',
+    '4': 'green',
+    '5': 'gray',
+    '6': 'orange',
+    '7': 'white'
+}
 
 # SCREEN CONFIG
 
@@ -65,7 +79,19 @@ BOARD_MATRIX_BORDERS_WIDTH = 1
 # GAME
 
 TITLE = 'MTRIX'
-ICON = 'game.png'
+ICON = MEDIA_PATH + '/game.png'
+
+MSG_WELCOME = "Welcome to MTRIX"
+MSG_USAGE1 = "Play/Pause (P)"
+MSG_USAGE2 = "Quit (ESC)"
+MSG_PAUSED = "PAUSED"
+MSG_UNPAUSE = "UNPAUSE (P)"
+MSG_GAME_OVER = "GAME OVER"
+MSG_GO_HOME = "Home Screen (P)"
+
+LBL_NEXT = "NEXT"
+LBL_SCORE = "SCORE"
+LBL_LINES = "LINES"
 
 MOVE_LEFT = 1
 MOVE_UP = 2

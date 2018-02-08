@@ -1,14 +1,20 @@
+#!/usr/bin/env python2.7
 # -*- coding: utf8 -*-
+"""
 
+All elements definitions and helper methods for elements.
+
+"""
 from copy import deepcopy
 from random import randrange
 
-from internal_config import NEW_ELEMENT_X, NEW_ELEMENT_Y
-from internal_config import ELEMENT_BLANK, ELEMENT_FILL
-from internal_config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_SMASH
+from game.config import NEW_ELEMENT_X, NEW_ELEMENT_Y
+from game.config import ELEMENT_BLANK, ELEMENT_FILL
+from game.config import MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT, MOVE_SMASH
 
-from game_exceptions import MovementException
+from game.exceptions import MovementException
 
+# Elements definitions
 e1 = [' E ', 'EEE', '   ']
 e2 = ['  E', 'EEE', '   ']
 e3 = ['E  ', 'EEE', '   ']
@@ -21,25 +27,20 @@ elements = [e1, e2, e3, e4, e5, e6, e7]
 
 ELEMENTS_IDS = ['1', '2', '3', '4', '5', '6', '7']
 
-ELEMENTS_COLORS = {
-    '1': 'red',
-    '2': 'blue',
-    '3': 'yellow',
-    '4': 'green',
-    '5': 'gray',
-    '6': 'orange',
-    '7': 'white'
-}
-
 raw_elements = zip(ELEMENTS_IDS, elements)
 
 
 def try_to_rotate(board, element):
     """
+    Takes board matrix and element matrix and rotates element by 90 degrees.
+
+    If there is a collision than MovementException is risen.
 
     :param Board board:
     :param Element element:
-    :return:
+
+    :raise MovementException
+
     """
     s = element.size
     x = element.x
@@ -63,10 +64,13 @@ def try_to_rotate(board, element):
 
 def get_possible_movements(board, element):
     """
+    Returns a list of possible moves depending on state of the
+     board and position of the element.
 
     :param Board board:
     :param Element element:
-    :return:
+    :return List of movements that are allowed
+    :rtype list[int]
 
     """
     possible_moves = [MOVE_LEFT, MOVE_RIGHT, MOVE_UP, MOVE_DOWN, MOVE_SMASH]
@@ -108,6 +112,15 @@ def get_possible_movements(board, element):
 
 
 class Element(object):
+    """
+
+    :param list _element:
+    :param int x:
+    :param int y:
+    :param int size:
+    :param str identifier:
+
+    """
     def __init__(self, element, identifier, x=NEW_ELEMENT_X, y=NEW_ELEMENT_Y):
         self._element = element
         self.x = x
@@ -146,7 +159,7 @@ class Element(object):
         return ','.join(lines)
 
     def __repr__(self):
-        return '<Element {} "{}">'.format(self.identifier, ','.join(self._element))
+        return 'Element({} "{}")'.format(self.identifier, ','.join(self._element))
 
 
 ALL_ELEMENTS = (Element(element, identifier) for identifier, element in raw_elements)

@@ -3,7 +3,7 @@
 from math import sin, cos
 from random import randrange
 
-from vectors import Vect2D
+from utils import Vect2D
 
 
 def Shake(offset):

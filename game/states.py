@@ -1,31 +1,56 @@
-#!/usr/bin/env python2.7
+# -*- coding: utf8 -*-
+"""
 
+Defined game states with manager that operates on them.
 
+GameStateManager is used to set initial screen and run the game.
+
+All game states inherit from GameState class.
+
+Defined and allowed states are:
+- HomeScreenState,
+- GamePlayState,
+- GamePauseState,
+- GameOverState.
+
+There is an option to pass data between states and Context is used for that purpose.
+
+"""
 import pygame
 
-from internal_config import MOVE_ENTER, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT
-from game import Game
 from screen import Screen
+from game import Game
+from game.config import MOVE_ENTER, MOVE_UP, MOVE_DOWN, MOVE_LEFT, MOVE_RIGHT
 
 key_pressed = lambda e, k: e.type == pygame.KEYDOWN and e.key == k
 
 
 class GameStateManager(object):
     """
+    GameStateManager is used to handle game state transitions.
+
     :param GameState state:
     :param GameState previous_state:
     :param bool _done:
+    :param pygame.time.Clock _clock:
+
 
     """
     def __init__(self, start_state=None):
         self.state = start_state
-
         self.previous_state = None
-
         self._done = False
         self._clock = pygame.time.Clock()
 
     def run(self):
+        """
+        Starts the game.
+
+        Handles key events, updates state and draws on screen.
+
+        Additionally pygame's Clock is used to restrict to 60 FPS.
+
+        """
         while self._done is False:
             self.handle_event()
             self.update()
@@ -34,6 +59,10 @@ class GameStateManager(object):
             self._clock.tick(60)
 
     def handle_event(self):
+        """
+        Handles pygame's events.
+
+        """
         for event in pygame.event.get():
             self.state.handle_event(event)
 
@@ -46,7 +75,6 @@ class GameStateManager(object):
             self.state.update()
 
     def draw(self):
-        # TODO reference to screen?
         self.state.draw()
 
     def flip_state(self):
@@ -58,17 +86,26 @@ class GameStateManager(object):
 
 class GameState(object):
     """
+    GameState should be inherited by new game state.
+
+    Particular attention should be paid to quit and done variables.
+
+    quit variable is used for exiting the game.
+
+    done variable is used for notifying GameStateManager to start
+      change to next state.
+
     :param Context _context:
     :param GameState next_state:
     :param bool quit:
-    :param bool done:l
+    :param bool done:
 
     """
     def __init__(self, context=None):
         """
 
         :param Context context:
-        :return:
+
         """
         self.context = context
         self.next_state = None
@@ -76,16 +113,16 @@ class GameState(object):
         self.done = False
 
     def handle_event(self, event):
-        pass
+        raise NotImplementedError()
 
     def update(self):
-        pass
+        raise NotImplementedError()
 
     def draw(self):
-        pass
+        raise NotImplementedError()
 
     def startup(self):
-        pass
+        raise NotImplementedError()
 
 
 class HomeScreenState(GameState):
@@ -109,6 +146,9 @@ class HomeScreenState(GameState):
 
     def draw(self):
         self._screen.draw_home_screen()
+
+    def startup(self):
+        pass
 
 
 class GamePlayState(GameState):
@@ -176,6 +216,9 @@ class GamePauseState(GameState):
         else:
             self._key = None
 
+    def update(self):
+        pass
+
     def draw(self):
         self._screen.set_next_element(self._game.get_next_element())
         self._screen.set_board(self._board)
@@ -207,6 +250,9 @@ class GameOverState(GameState):
         else:
             self._key = None
 
+    def update(self):
+        pass
+
     def draw(self):
         self._screen.set_next_element(self._game.get_next_element())
         self._screen.set_board(self._board)
@@ -222,10 +268,11 @@ class Context(object):
 
     def __init__(self, screen, game):
         """
+        Context holds saved data between game states.
 
         :param Screen screen:
         :param Game game:
-        :return:
+
         """
         self.screen = screen
         self.game = game
