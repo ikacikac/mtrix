@@ -26,3 +26,14 @@ Game logic and media are separated in few folders. Here is a brief description o
  * `utils` - holds `Vect2D` class and Blinker's events.
 
 
+## Future ideas
+
+Main purpose of this pet project was to practice Python programming and getting to know pygame framework.
+
+However, the initial idea was to create multiplayer version with client/server architecture.
+During the implementation period it was obvious that creating multiplayer version would be time consuming and would
+involve more learning and practice in other domains (e.g. game network programming).
+
+This is why why project will remain in current state for a certain period of time.
+
+Hope you like it and learn something from this code. **Happy playing!!!**
